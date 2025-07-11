@@ -2,6 +2,8 @@
 
 A full-stack SMS messaging application that allows users to send and receive SMS messages through a modern web interface.
 
+<img width="1478" height="844" alt="Screenshot 2025-07-11 at 2 14 18 PM" src="https://github.com/user-attachments/assets/d35fe480-2e27-44d6-b628-9c9688eae15a" />
+
 ## 🚀 Features
 
 - **Send SMS Messages**: Send text messages to any phone number
