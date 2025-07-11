@@ -1,0 +1,52 @@
+<div class="message-list-container">
+  <div class="message-list-header">
+    <div class="header-content">
+      <mat-icon>message</mat-icon>
+      <h1>Message History</h1>
+    </div>
+  </div>
+  
+  <div class="message-list-content">
+    <div *ngIf="loading" class="loading">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading messages...</p>
+    </div>
+    
+    <div *ngIf="!loading && messages.length === 0" class="no-messages">
+      <mat-icon>inbox</mat-icon>
+      <p>No messages yet</p>
+      <span>Send your first message to see it here</span>
+    </div>
+    
+    <div *ngIf="!loading && messages.length > 0" class="messages-container" #messageContainer>
+      <div *ngFor="let message of messages; trackBy: trackByMessage" 
+           class="message-card"
+           [attr.data-message-id]="message._id || message.id"
+           [ngClass]="{'sent-message': message.direction === 'outbound', 'received-message': message.direction === 'inbound'}">
+        <div class="message-header">
+          <div class="message-info">
+            <div class="message-direction">
+              <mat-icon *ngIf="message.direction === 'outbound'" class="direction-icon sent">send</mat-icon>
+              <mat-icon *ngIf="message.direction === 'inbound'" class="direction-icon received">inbox</mat-icon>
+              <span class="direction-text" [ngClass]="{'sent': message.direction === 'outbound', 'received': message.direction === 'inbound'}">
+                {{ message.direction === 'outbound' ? 'Sent to' : 'Received from' }}
+              </span>
+            </div>
+            <div class="phone-number">
+              <mat-icon>phone</mat-icon>
+              {{ message.direction === 'outbound' ? message.to : message.from }}
+            </div>
+            <div class="message-time">{{ formatDate(message.created_at!) }}</div>
+          </div>
+          <div class="message-status">
+            <mat-icon *ngIf="message.direction === 'outbound'" class="status-icon sent">check_circle</mat-icon>
+            <mat-icon *ngIf="message.direction === 'inbound'" class="status-icon received">inbox</mat-icon>
+          </div>
+        </div>
+        <div class="message-content" [ngClass]="{'sent-content': message.direction === 'outbound', 'received-content': message.direction === 'inbound'}">
+          {{ message.body }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

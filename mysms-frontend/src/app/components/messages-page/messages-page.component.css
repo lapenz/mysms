@@ -1,0 +1,32 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  min-height: calc(100vh - 64px);
+}
+
+.form-section {
+  order: 1;
+}
+
+.list-section {
+  order: 2;
+}
+
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .form-section {
+    order: 1;
+  }
+  
+  .list-section {
+    order: 2;
+  }
+} 
