@@ -6,6 +6,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
@@ -19,7 +22,10 @@ import { AuthService } from '../../services/auth.service';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    MatSnackBarModule,
+    MatIconModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
@@ -48,8 +54,40 @@ export class LoginComponent {
       },
       error: (error) => {
         this.loading = false;
-        this.errorMessage = error.error?.error || 'Login failed';
+        this.handleLoginError(error);
       }
     });
+  }
+
+  private handleLoginError(error: any): void {
+    // Set a default error message
+    this.errorMessage = 'Login failed. Please try again.';
+    
+    // Try to extract a more specific error message
+    if (error.error) {
+      if (typeof error.error === 'string') {
+        this.errorMessage = error.error;
+      } else if (error.error.status && error.error.status.message) {
+        this.errorMessage = error.error.status.message;
+      } else if (error.error.error) {
+        this.errorMessage = error.error.error;
+      } else if (error.error.message) {
+        this.errorMessage = error.error.message;
+      } else if (Array.isArray(error.error)) {
+        this.errorMessage = error.error.join(', ');
+      }
+    } else if (error.message) {
+      this.errorMessage = error.message;
+    } else if (error.status === 401) {
+      this.errorMessage = 'Invalid email or password';
+    } else if (error.status === 422) {
+      this.errorMessage = 'Please check your input and try again';
+    } else if (error.status === 0) {
+      this.errorMessage = 'Unable to connect to server. Please check your connection.';
+    }
+  }
+
+  clearError(): void {
+    this.errorMessage = '';
   }
 } 
